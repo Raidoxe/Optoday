@@ -4,8 +4,12 @@ import AddTask from '../components/AddTask';
 import React from 'react';
 import TaskComp from '../components/Task';
 import { Task as TaskType } from '../Types';
+import { io } from 'socket.io-client';
 
 export default function Home() {
+
+  const socket = io('http://localhost:5500');
+
   const [taskWindowState, setTaskWindowState] = React.useState<boolean>(false);
 
   const setTaskState = () => {
