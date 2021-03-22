@@ -107,3 +107,35 @@
   filter: blur(1px);
 }
 
+.pageLoginActive {
+  display: none;
+}
+
+.loginContainer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginDiv {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 50px;
+}
+
+.enterPassword {
+  margin-right: 20px;
+}
+
+.Enter {
+  margin-left: 20px;
+}
+

@@ -21,7 +21,11 @@ io.on('connection', (socket: any) => {
 io.on('auth', (socket: any, data: string) => {
     if (data === 'ABC123') {
         verifiedUsers.push(socket);
+        socket.emit('auth-result', true);
+    } else {
+        socket.emit('auth-result', false);
     }
+    
 });
 
 io.on('upload-task', (socket: any, data: Task) => {

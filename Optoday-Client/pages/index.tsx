@@ -5,12 +5,15 @@ import React from 'react';
 import TaskComp from '../components/Task';
 import { Task as TaskType } from '../Types';
 import { io } from 'socket.io-client';
+import Login from '../components/Login';
 
 export default function Home() {
 
-  const socket = io('http://localhost:5500');
+  const socket = io('http://localhost:5500', {transports: ['websocket', 'polling', 'flashsocket']});
 
   const [taskWindowState, setTaskWindowState] = React.useState<boolean>(false);
+
+  const [isLoggedIn, setLoggedIn] = React.useState<boolean>(false);
 
   const setTaskState = () => {
     setTaskWindowState(true);
@@ -24,8 +27,9 @@ export default function Home() {
   }
   return (
     <div>
+      {isLoggedIn ? null : <Login socket={socket} setLoggedIn={setLoggedIn}/>}
       {taskWindowState ? <AddTask /> : null}
-      <div className={taskWindowState ? styles.PageBlur : styles.Page}>
+      <div className={taskWindowState ?  styles.PageBlur : isLoggedIn ? styles.Page : styles.pageLoginActive}>
         <div className={styles.PlusCircleHolder} onClick={setTaskState}>
           <object type='image/svg+xml' data='/plus-circle.svg' className={styles.add}/>
         </div>
