@@ -3,7 +3,7 @@ import React from 'react';
 import { Task } from '../Types';
 
 
-export default function AddTask()  {
+const AddTask: React.FC<{socket: any}> = ({socket}) => {
 
     const [formState, setFormState] = React.useState<Task>(null);
 
@@ -14,8 +14,18 @@ export default function AddTask()  {
         });
     }
 
+    const [errorMessage, setErrorMessage] = React.useState<string>(null);
+
     const onSubmit = () => {
-        //send to server
+        if(formState != null) {
+            if(formState.name != null && formState.importance <= 10 && formState.importance >= 1 && formState.TTD != null) {
+                socket.emit('upload-task', formState)
+            } else {
+                setErrorMessage('Entered data incorrect');
+            }
+    
+        }
+        
     }
 
     return (
@@ -30,7 +40,10 @@ export default function AddTask()  {
                 <input type="text" placeholder="Time to do, minutes" className={styles.timeToDo} name="TTD" onChange={handleInputChange}/>
                 <textarea placeholder="Additional Info" className={styles.additionalInfo} name="AI" onChange={handleInputChange}/>
                 <button className={styles.done} onClick={onSubmit}>Done</button>
+                <p className={styles.errorMessage}>{errorMessage}</p>
             </div>
         </div>
     )
 }
+
+export default AddTask;

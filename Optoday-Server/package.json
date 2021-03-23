@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node server.ts"
+    "start": "ts-node server.ts",
+    "dev": "node ./node_modules/nodemon/bin/nodemon.js"
   },
   "author": "Oliver Huth",
   "license": "ISC",

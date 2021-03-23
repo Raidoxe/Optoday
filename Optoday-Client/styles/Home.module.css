@@ -30,6 +30,7 @@
   border-style: solid;
   border-color: black;
   border-radius: 7px;
+  background: white;
 }
 
 .taskName, .timeToDo, .additionalInfo, .done {
@@ -104,7 +105,7 @@
 }
 
 .PageBlur {
-  filter: blur(1px);
+  filter: blur(3px);
 }
 
 .pageLoginActive {
@@ -122,9 +123,6 @@
 
 .loginDiv {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 1px;
   border-style: solid;
   border-radius: 5px;
@@ -140,6 +138,8 @@
 }
 
 .errorMessage {
-  margin-right: 50px;
+  text-align: center;
+  margin: 20px;
+  color: red;
 }
 

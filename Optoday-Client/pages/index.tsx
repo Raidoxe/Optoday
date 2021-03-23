@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <div>
       {isLoggedIn ? null : <Login socket={socket} setLoggedIn={setLoggedIn}/>}
-      {taskWindowState ? <AddTask /> : null}
+      {taskWindowState ? <AddTask socket={socket}/> : null}
       <div className={taskWindowState ?  styles.PageBlur : isLoggedIn ? styles.Page : styles.pageLoginActive}>
         <div className={styles.PlusCircleHolder} onClick={setTaskState}>
           <object type='image/svg+xml' data='/plus-circle.svg' className={styles.add}/>

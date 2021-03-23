@@ -26,8 +26,10 @@ const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAc
     })
 
     useEffect(() => {
-        console.log(socket.id);
-    })
+        return () => {
+            socket.removeAllListeners('auth-result');
+        }
+    }, []);
 
     return (
         <div className={styles.loginContainer}>
