@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}> = ({socket, setLoggedIn}) => {
     const [pass, setPass] = React.useState<string>('');
@@ -7,14 +7,17 @@ const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAc
     const [errorMessage, setErrorMessage] = React.useState<string>(null);
 
     const onType = (event) => {
+        console.log('Ontype')
         setPass(event.target.value);
     }
 
     const onEnter = () => {
+        console.log('Sending auth: '+pass);
         socket.emit('auth', pass);
     }
 
     socket.on('auth-result', (data: boolean) => {
+        console.log('Recieved auth result: '+data);
         if(data === true) {
             setLoggedIn(true);
         } else {
@@ -22,14 +25,19 @@ const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAc
         }
     })
 
+    useEffect(() => {
+        console.log(socket.id);
+    })
+
     return (
         <div className={styles.loginContainer}>
             <div className={styles.loginDiv}>
                 <label className={styles.enterPassword}>Enter Password:</label>
                 <input type="password" className={styles.passInput} onChange={onType}/>
-                <button className={styles.Enter} onSubmit={onEnter}>Enter</button>
+                <button className={styles.Enter} onClick={onEnter}>Enter</button>
+                <p className={styles.errorMessage}>{errorMessage}</p>
             </div>
-            <p className={styles.errorMessage}>{errorMessage}</p>
+            
         </div>
     )
 }

@@ -15,41 +15,44 @@ let verifiedUsers: Array<any> = [];
 let currentTasks: Array<Task> = [];
 
 io.on('connection', (socket: any) => {
-    console.log('client connected');
-});
-
-io.on('auth', (socket: any, data: string) => {
-    if (data === 'ABC123') {
-        verifiedUsers.push(socket);
-        socket.emit('auth-result', true);
-    } else {
-        socket.emit('auth-result', false);
-    }
+    console.log('client connected: '+socket.id);
+    socket.on('auth', (data: string) => {
+        console.log('Recieved auth: '+data);
+        if (data === 'ABC123') {
+            console.log('Data correct');
+            verifiedUsers.push(socket);
+            socket.emit('auth-result', true);
+        } else {
+            socket.emit('auth-result', false);
+        }
+        
+    });
     
-});
-
-io.on('upload-task', (socket: any, data: Task) => {
-    verifiedUsers.forEach((verifiedSocket) => {
-        if(socket === verifiedSocket) { 
-            currentTasks.push(data);
-        }
+    socket.on('upload-task', (data: Task) => {
+        verifiedUsers.forEach((verifiedSocket) => {
+            if(socket === verifiedSocket) { 
+                currentTasks.push(data);
+            }
+        });
     });
-});
-
-io.on('finish-task', (socket: any, taskName: string) => {
-    verifiedUsers.forEach((verifiedSocket) => {
-        if(socket === verifiedSocket) { 
-            currentTasks.forEach((Task: Task) => {
-                if(Task.name === taskName) {
-                    const index = currentTasks.indexOf(Task);
-                    if (index > -1) {
-                        currentTasks.splice(index, 1);
+    
+    socket.on('finish-task', (taskName: string) => {
+        verifiedUsers.forEach((verifiedSocket) => {
+            if(socket === verifiedSocket) { 
+                currentTasks.forEach((Task: Task) => {
+                    if(Task.name === taskName) {
+                        const index = currentTasks.indexOf(Task);
+                        if (index > -1) {
+                            currentTasks.splice(index, 1);
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
+        });
     });
 });
+
+
 
 const sendTasks = () => {
     verifiedUsers.forEach((socket) => {

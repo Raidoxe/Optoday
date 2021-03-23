@@ -25,6 +25,7 @@ export default function Home() {
     TTD: 40,
     AI: 'Make sure to check connect for additional info'
   }
+
   return (
     <div>
       {isLoggedIn ? null : <Login socket={socket} setLoggedIn={setLoggedIn}/>}
