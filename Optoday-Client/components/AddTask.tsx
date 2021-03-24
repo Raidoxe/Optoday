@@ -2,8 +2,15 @@ import styles from "../styles/Home.module.css";
 import React from 'react';
 import { Task } from '../Types';
 
+type TaskUpload = {
+    name: string;
+    importance: number;
+    TTD: number;
+    AI: string;
+    Auth: string;
+}
 
-const AddTask: React.FC<{socket: any, setWindowState: React.Dispatch<React.SetStateAction<boolean>>}> = ({socket, setWindowState}) => {
+const AddTask: React.FC<{socket: any, setWindowState: React.Dispatch<React.SetStateAction<boolean>>, Auth: string}> = ({socket, setWindowState, Auth}) => {
 
     const [formState, setFormState] = React.useState<Task>(null);
 
@@ -22,7 +29,7 @@ const AddTask: React.FC<{socket: any, setWindowState: React.Dispatch<React.SetSt
             console.log(0);
             if(formState.name != null && formState.importance <= 10 && formState.importance >= 1 && formState.TTD != null) {
                 console.log(1);
-                socket.emit('upload-task', formState)
+                socket.emit('upload-task', {...formState, Auth: Auth});
                 console.log(socket.id);
                 setWindowState(false);
             } else {

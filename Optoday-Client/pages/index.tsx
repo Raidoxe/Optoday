@@ -15,6 +15,8 @@ export default function Home() {
 
   const [isLoggedIn, setLoggedIn] = React.useState<boolean>(false);
 
+  const [AuthCode, setAuthCode] = React.useState<string>('');
+
   const setTaskState = () => {
     setTaskWindowState(true);
   }
@@ -28,8 +30,8 @@ export default function Home() {
 
   return (
     <div>
-      {isLoggedIn ? null : <Login socket={socket} setLoggedIn={setLoggedIn}/>}
-      {taskWindowState ? <AddTask socket={socket} setWindowState={setTaskWindowState}/> : null}
+      {isLoggedIn ? null : <Login socket={socket} setLoggedIn={setLoggedIn} setAuthCode={setAuthCode}/>}
+      {taskWindowState ? <AddTask socket={socket} setWindowState={setTaskWindowState} Auth={AuthCode}/> : null}
       <div className={taskWindowState ?  styles.PageBlur : isLoggedIn ? styles.Page : styles.pageLoginActive}>
         <div className={styles.PlusCircleHolder} onClick={setTaskState}>
           <object type='image/svg+xml' data='/plus-circle.svg' className={styles.add}/>

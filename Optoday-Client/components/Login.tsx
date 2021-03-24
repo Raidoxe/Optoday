@@ -1,7 +1,7 @@
 import styles from '../styles/Home.module.css';
 import React, { useEffect } from 'react';
 
-const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}> = ({socket, setLoggedIn}) => {
+const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: React.Dispatch<React.SetStateAction<string>>}> = ({socket, setLoggedIn, setAuthCode}) => {
     const [pass, setPass] = React.useState<string>('');
 
     const [errorMessage, setErrorMessage] = React.useState<string>(null);
@@ -13,6 +13,7 @@ const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAc
 
     const onEnter = () => {
         console.log('Sending auth: '+pass);
+        setAuthCode(pass);
         socket.emit('auth', pass);
     }
 

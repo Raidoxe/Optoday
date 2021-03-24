@@ -3,14 +3,20 @@ const fs = require('fs');
 
 console.log('startup');
 
+const authcode = 'ABC123'
+
 type Task = {
     name: string;
     importance: number;
     TTD: number;
     AI: string;
+    Auth?: string;
 }
 
-let verifiedUsers: Array<string> = [];
+type TaskFinish = {
+    name: string;
+    Auth: string;
+}
 
 let currentTasks: Array<Task> = [];
 
@@ -18,9 +24,8 @@ io.on('connection', (socket: any) => {
     console.log('client connected: '+socket.id);
     socket.on('auth', (data: string) => {
         console.log('Recieved auth: '+data);
-        if (data === 'ABC123') {
+        if (data === authcode) {
             console.log('Data correct');
-            verifiedUsers.push(socket.id);
             socket.emit('auth-result', true);
         } else {
             socket.emit('auth-result', false);
@@ -30,43 +35,37 @@ io.on('connection', (socket: any) => {
     
     socket.on('upload-task', (data: Task) => {
         console.log('Task uploaded: '+data);
-        console.log(verifiedUsers);
-        verifiedUsers.forEach((verifiedSocket) => {
-            console.log(0);
-            console.log('socket id is: '+socket.id);
-            console.log('verified id is: '+verifiedSocket.id);
-            if(socket.id === verifiedSocket.id) { 
-                console.log(1);
-                currentTasks.push(data);
-            }
-        });
+        if(data.Auth === authcode) { 
+            console.log(1);
+            delete data.Auth;
+            currentTasks.push(data);
+            console.log(currentTasks);
+        }
     });
     
-    socket.on('finish-task', (taskName: string) => {
-        verifiedUsers.forEach((verifiedSocket) => {
-            if(socket === verifiedSocket) { 
+    socket.on('finish-task', (data: TaskFinish) => {
+        if(data.Auth === authcode) { 
                 currentTasks.forEach((Task: Task) => {
-                    if(Task.name === taskName) {
+                    if(Task.name === data.name) {
                         const index = currentTasks.indexOf(Task);
                         if (index > -1) {
                             currentTasks.splice(index, 1);
                         }
                     }
                 })
-            }
-        });
+        }
     });
+    socket.on('get-tasks', (Auth: string) => {
+        if (Auth === authcode) {
+            socket.emit('current-tasks', currentTasks);
+        }
+    })
 });
 
 
 
-const sendTasks = () => {
-    verifiedUsers.forEach((socket) => {
-        socket.emit(currentTasks);
-    })
-}
 
-let taskUpdateTimer = setInterval(sendTasks, 3000);
+
 
 const backupTasks = () => {
     fs.writeFile('tasks.json', currentTasks.toString(), function (err: any) {
