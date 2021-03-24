@@ -10,7 +10,7 @@ type Task = {
     AI: string;
 }
 
-let verifiedUsers: Array<any> = [];
+let verifiedUsers: Array<string> = [];
 
 let currentTasks: Array<Task> = [];
 
@@ -20,7 +20,7 @@ io.on('connection', (socket: any) => {
         console.log('Recieved auth: '+data);
         if (data === 'ABC123') {
             console.log('Data correct');
-            verifiedUsers.push(socket);
+            verifiedUsers.push(socket.id);
             socket.emit('auth-result', true);
         } else {
             socket.emit('auth-result', false);
@@ -29,8 +29,14 @@ io.on('connection', (socket: any) => {
     });
     
     socket.on('upload-task', (data: Task) => {
+        console.log('Task uploaded: '+data);
+        console.log(verifiedUsers);
         verifiedUsers.forEach((verifiedSocket) => {
-            if(socket === verifiedSocket) { 
+            console.log(0);
+            console.log('socket id is: '+socket.id);
+            console.log('verified id is: '+verifiedSocket.id);
+            if(socket.id === verifiedSocket.id) { 
+                console.log(1);
                 currentTasks.push(data);
             }
         });

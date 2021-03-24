@@ -3,7 +3,7 @@ import React from 'react';
 import { Task } from '../Types';
 
 
-const AddTask: React.FC<{socket: any}> = ({socket}) => {
+const AddTask: React.FC<{socket: any, setWindowState: React.Dispatch<React.SetStateAction<boolean>>}> = ({socket, setWindowState}) => {
 
     const [formState, setFormState] = React.useState<Task>(null);
 
@@ -17,9 +17,14 @@ const AddTask: React.FC<{socket: any}> = ({socket}) => {
     const [errorMessage, setErrorMessage] = React.useState<string>(null);
 
     const onSubmit = () => {
+        console.log('OnSubmit')
         if(formState != null) {
+            console.log(0);
             if(formState.name != null && formState.importance <= 10 && formState.importance >= 1 && formState.TTD != null) {
+                console.log(1);
                 socket.emit('upload-task', formState)
+                console.log(socket.id);
+                setWindowState(false);
             } else {
                 setErrorMessage('Entered data incorrect');
             }
