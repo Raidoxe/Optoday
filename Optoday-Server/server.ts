@@ -18,7 +18,9 @@ type TaskFinish = {
     Auth: string;
 }
 
-let currentTasks: Array<Task> = [];
+const taskData = fs.readFileSync('tasks.json');
+
+let currentTasks: Array<Task> = taskData != null ? JSON.parse(taskData) : [];
 
 io.on('connection', (socket: any) => {
     console.log('client connected: '+socket.id);
@@ -68,7 +70,7 @@ io.on('connection', (socket: any) => {
 
 
 const backupTasks = () => {
-    fs.writeFile('tasks.json', currentTasks.toString(), function (err: any) {
+    fs.writeFile('tasks.json', JSON.stringify(currentTasks), function (err: any) {
         if(err) {
             console.error('Unable to backup tasks');
         } else {
@@ -80,5 +82,5 @@ const backupTasks = () => {
 let taskBackupTimer =  setInterval(backupTasks, 180000);
 
 
-
+//180000
 

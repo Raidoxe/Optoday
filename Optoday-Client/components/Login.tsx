@@ -1,7 +1,9 @@
 import styles from '../styles/Home.module.css';
 import React, { useEffect } from 'react';
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
-const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: React.Dispatch<React.SetStateAction<string>>}> = ({socket, setLoggedIn, setAuthCode}) => {
+const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: React.Dispatch<React.SetStateAction<string>>}> = ({socket, setLoggedIn, setAuthCode}) => {
     const [pass, setPass] = React.useState<string>('');
 
     const [errorMessage, setErrorMessage] = React.useState<string>(null);
@@ -28,7 +30,7 @@ const Login: React.FC<{socket: any, setLoggedIn: React.Dispatch<React.SetStateAc
 
     useEffect(() => {
         return () => {
-            socket.removeAllListeners('auth-result');
+            socket.off('auth-result');
         }
     }, []);
 

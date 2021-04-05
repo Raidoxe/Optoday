@@ -19,13 +19,17 @@ const Task: React.FC<{Task: TaskType}> = ({Task}) => {
         }
     };
 
+    const taskFinished = () => {
+        setCheckAnim(true);
+    }
+
     return (
         <div className={styles.Task}>
             <h2 className={styles.name}>{Task.name}</h2>
             <p className={styles.importance}>Importance: {Task.importance}</p>
             <p className={styles.TTD}>Time to do: {Task.TTD}</p>
             <p className={styles.AI}>{Task.AI}</p>
-            <div className={styles.check} onClick={() => setCheckAnim(true)}>
+            <div className={styles.check} onClick={taskFinished}>
                 {checkAnim ? 
                 <Animator options={animationOptions} height={60} width={60}/>
                 :
