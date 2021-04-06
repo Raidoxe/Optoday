@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
-const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: React.Dispatch<React.SetStateAction<string>>}> = ({socket, setLoggedIn, setAuthCode}) => {
+const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: (auth: string) => void}> = ({socket, setLoggedIn, setAuthCode}) => {
     const [pass, setPass] = React.useState<string>('');
 
     const [errorMessage, setErrorMessage] = React.useState<string>(null);
@@ -15,20 +15,20 @@ const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLo
 
     const onEnter = () => {
         console.log('Sending auth: '+pass);
-        setAuthCode(pass);
+
         socket.emit('auth', pass);
     }
 
-    socket.on('auth-result', (data: boolean) => {
-        console.log('Recieved auth result: '+data);
-        if(data === true) {
-            setLoggedIn(true);
-        } else {
-            setErrorMessage('Wrong password');
-        }
-    })
-
     useEffect(() => {
+        socket.on('auth-result', (data: boolean) => {
+            console.log('Recieved auth result: '+data);
+            if(data === true) {
+                setAuthCode(pass);
+                setLoggedIn(true);
+            } else {
+                setErrorMessage('Wrong password');
+            }
+        });
         return () => {
             socket.off('auth-result');
         }

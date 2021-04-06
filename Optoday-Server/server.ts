@@ -58,7 +58,10 @@ io.on('connection', (socket: any) => {
         }
     });
     socket.on('get-tasks', (Auth: string) => {
+        console.log('attempted to get task')
+        console.log(Auth);
         if (Auth === authcode) {
+            console.log(0)
             socket.emit('current-tasks', currentTasks);
         }
     })
