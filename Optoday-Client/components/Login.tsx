@@ -2,6 +2,7 @@ import styles from '../styles/Home.module.css';
 import React, { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
+import { AuthResultData } from '../Types';
 
 const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>, setAuthCode: (auth: string) => void}> = ({socket, setLoggedIn, setAuthCode}) => {
     const [pass, setPass] = React.useState<string>('');
@@ -20,10 +21,10 @@ const Login: React.FC<{socket: Socket<DefaultEventsMap, DefaultEventsMap>, setLo
     }
 
     useEffect(() => {
-        socket.on('auth-result', (data: boolean) => {
-            console.log('Recieved auth result: '+data);
-            if(data === true) {
-                setAuthCode(pass);
+        socket.on('auth-result', (data: AuthResultData) => {
+            console.log('Recieved auth result: '+data.auth);
+            if(data.result === true) {
+                setAuthCode(data.auth);
                 setLoggedIn(true);
             } else {
                 setErrorMessage('Wrong password');

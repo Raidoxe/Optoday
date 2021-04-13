@@ -18,6 +18,11 @@ type TaskFinish = {
     Auth: string;
 }
 
+type AuthResultData = {
+    auth: string,
+    result: boolean
+}
+
 const taskData = fs.readFileSync('tasks.json');
 
 let currentTasks: Array<Task> = taskData != null ? JSON.parse(taskData) : [];
@@ -28,9 +33,9 @@ io.on('connection', (socket: any) => {
         console.log('Recieved auth: '+data);
         if (data === authcode) {
             console.log('Data correct');
-            socket.emit('auth-result', true);
+            socket.emit('auth-result', {auth: data, result: true});
         } else {
-            socket.emit('auth-result', false);
+            socket.emit('auth-result', {auth: data, result: false});
         }
         
     });

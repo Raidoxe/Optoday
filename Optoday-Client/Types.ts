@@ -4,3 +4,8 @@ export type Task = {
     TTD: number;
     AI: string;
 }
+
+export type AuthResultData = {
+    auth: string,
+    result: boolean
+}
