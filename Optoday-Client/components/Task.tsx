@@ -1,14 +1,19 @@
-import React from 'react';
+import { FC, useEffect, useState} from 'react';
 import { Task as TaskType } from '../Types';
 import styles from '../styles/Task.module.css';
 import Animator from 'react-lottie';
 import checkAnimationData from '../public/check-animation.json';
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
+type TaskFinish = {
+    name: string;
+    Auth: string;
+}
 
+const Task: FC<{Task: TaskType, socket: Socket<DefaultEventsMap, DefaultEventsMap>, AuthCode: string}> = ({Task, socket, AuthCode}) => {
 
-const Task: React.FC<{Task: TaskType}> = ({Task}) => {
-
-    const [checkAnim, setCheckAnim] = React.useState<boolean>(false);
+    const [checkAnim, setCheckAnim] = useState<boolean>(false);
 
     const animationOptions = {
         loop: false,
@@ -21,6 +26,12 @@ const Task: React.FC<{Task: TaskType}> = ({Task}) => {
 
     const taskFinished = () => {
         setCheckAnim(true);
+        console.log(Task);
+        setTimeout(() => {
+            socket.emit('finish-task', { name: Task.name, Auth: AuthCode});
+            setCheckAnim(false);
+    }, 2000)
+        
     }
 
     return (

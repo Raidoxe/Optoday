@@ -3,6 +3,7 @@ export type Task = {
     importance: number;
     TTD: number;
     AI: string;
+    Auth?: string;
 }
 
 export type AuthResultData = {

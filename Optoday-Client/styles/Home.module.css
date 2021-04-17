@@ -11,6 +11,20 @@
   pointer-events: none;
 }
 
+@media only screen and (max-width: 900px) {
+  .todo {
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-top-color: black;
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+    padding: 30px;
+  }
+}
+
 .todo {
   border-top-width: 2px;
   border-top-style: solid;
