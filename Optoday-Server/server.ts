@@ -23,7 +23,11 @@ type AuthResultData = {
 
 const taskData = fs.readFileSync('tasks.json');
 
+console.log('startup');
+
 let currentTasks: Array<Task> = taskData != null ? JSON.parse(taskData) : [];
+
+console.log('loadedtasks');
 
 io.on('connection', (socket: any) => {
     socket.on('auth', (data: string) => {
