@@ -9,7 +9,7 @@ import Login from '../components/Login';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 import TaskHandler from '../components/TaskHandler';
 
-const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io('http://localhost:5500', {transports: ['websocket', 'polling', 'flashsocket']});
+const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io('http://oliverhuth.ddns.net:5500', {transports: ['websocket', 'polling', 'flashsocket']});
 
 export default function Home() {
   const [AuthCode, setAuthCode] = React.useState<string>(null);
